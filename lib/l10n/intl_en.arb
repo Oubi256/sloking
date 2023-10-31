@@ -1,3 +1,6 @@
 {
-  "intro": "Intro text"
+  "dailyBonus": "Daily bonus",
+  "menuContinue": "Continue",
+  "menuNewGame": "New game",
+  "menuRules": "Rules"
 }

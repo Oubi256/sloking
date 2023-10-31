@@ -7,8 +7,7 @@ import 'package:sloking/pages/game_page.dart';
 import 'package:sloking/pages/home_page.dart';
 import 'package:sloking/pages/rules_page.dart';
 import 'package:sloking/pages/splash_page.dart';
-
-import 'generated/l10n.dart';
+import 'package:sloking/generated/l10n.dart';
 
 part 'router_config.dart';
 
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(412, 832),
       builder: (_, __) => MaterialApp.router(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

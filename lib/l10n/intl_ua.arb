@@ -1,3 +1,6 @@
 {
-  "intro": "Інтро текст"
+  "dailyBonus": "Щоденний бонус",
+  "menuContinue": "Продовжити гру",
+  "menuNewGame": "Нова гра",
+  "menuRules": "Правила"
 }

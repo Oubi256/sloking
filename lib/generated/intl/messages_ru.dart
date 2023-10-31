@@ -22,6 +22,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "intro": MessageLookupByLibrary.simpleMessage("Интро текст")
+        "dailyBonus": MessageLookupByLibrary.simpleMessage("Ежедневный бонус"),
+        "menuContinue": MessageLookupByLibrary.simpleMessage("Продолжить игру"),
+        "menuNewGame": MessageLookupByLibrary.simpleMessage("Новая игра"),
+        "menuRules": MessageLookupByLibrary.simpleMessage("Правила")
       };
 }
