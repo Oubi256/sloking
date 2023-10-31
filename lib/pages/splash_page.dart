@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../generated/l10n.dart';
-
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
@@ -10,7 +8,16 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(S.of(context).intro),
+        child: Container(
+          color: Colors.black,
+          child: Image.asset(
+            "assets/images/card/icons/slots_01.png",
+            width: 300,
+            height: 300,
+            fit: BoxFit.fill,
+            filterQuality: FilterQuality.low,
+          ),
+        ),
       ),
     );
   }
