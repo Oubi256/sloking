@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sloking/constants.dart';
 import 'package:sloking/generated/l10n.dart';
+import 'package:sloking/widgets/gems/gem_counter.dart';
 import 'package:sloking/widgets/general/convex_text_button.dart';
 import 'package:sloking/widgets/general/page_wrapper.dart';
 import 'package:sloking/widgets/wheel/daily_fortune_wheel.dart';
@@ -96,6 +97,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+        Positioned(top: 227.r, left: 58.w, child: GemCounter(initialNumber: 0,))
       ],
     );
   }

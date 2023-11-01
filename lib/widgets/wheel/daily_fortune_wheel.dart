@@ -11,6 +11,8 @@ import 'package:sloking/widgets/wheel/fortune_wheel_item.dart';
 class DailyFortuneWheel extends StatefulWidget {
   final void Function()? onAnimationStart;
   final void Function()? onAnimationEnd;
+  final void Function(int reward)? onWin;
+  final void Function()? onDefeat;
   final double width;
   final double height;
 
@@ -20,6 +22,8 @@ class DailyFortuneWheel extends StatefulWidget {
     this.onAnimationEnd,
     required this.width,
     required this.height,
+    this.onWin,
+    this.onDefeat,
   });
 
   @override
@@ -45,8 +49,10 @@ class DailyFortuneWheelState extends State<DailyFortuneWheel> with TickerProvide
     TweenSequenceItem(tween: thirdOpacityHalfTween, weight: 0.3),
   ]).animate(animationController);
 
+  late int spinResult;
+
   void spin() async {
-    final int spinResult = Fortune.randomInt(0, items.length);
+    spinResult = Fortune.randomInt(0, items.length);
     setState(() {
       streamController.add(spinResult);
       playWinAnimation = items[spinResult].isWin;
@@ -56,6 +62,7 @@ class DailyFortuneWheelState extends State<DailyFortuneWheel> with TickerProvide
   void _onAnimationEnd() {
     animationController.forward(from: 0);
     widget.onAnimationEnd?.call();
+    playWinAnimation ? widget.onWin?.call(items[spinResult].gemsReward) : widget.onDefeat?.call();
   }
 
   void _onAnimationStart() {

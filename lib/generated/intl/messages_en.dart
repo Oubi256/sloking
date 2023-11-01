@@ -22,14 +22,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(time) => "Next time at ${time}";
 
+  static String m1(value) => "You have won +${value} coins";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "backToMenu": MessageLookupByLibrary.simpleMessage("Menu"),
         "dailyBonus": MessageLookupByLibrary.simpleMessage("Daily bonus"),
+        "fortuneWheelDefeat":
+            MessageLookupByLibrary.simpleMessage("Better luck next time"),
         "fortuneWheelDelay": m0,
         "fortuneWheelSpin": MessageLookupByLibrary.simpleMessage("Spin"),
         "fortuneWheelTryAgain":
             MessageLookupByLibrary.simpleMessage("Try again"),
+        "fortuneWheelWin":
+            MessageLookupByLibrary.simpleMessage("Congratulations!"),
+        "fortuneWheelWinReward": m1,
         "menuContinue": MessageLookupByLibrary.simpleMessage("Continue"),
         "menuNewGame": MessageLookupByLibrary.simpleMessage("New game"),
         "menuRules": MessageLookupByLibrary.simpleMessage("Rules")

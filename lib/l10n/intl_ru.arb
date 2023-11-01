@@ -6,5 +6,8 @@
   "fortuneWheelTryAgain": "Попробуй еще",
   "fortuneWheelSpin": "Вращать",
   "fortuneWheelDelay": "Следующий раз в {time}",
+  "fortuneWheelWin": "Поздравляем!",
+  "fortuneWheelWinReward": "Вы выиграли +{value} монет",
+  "fortuneWheelDefeat": "Повезет в другой раз",
   "backToMenu": "Меню"
 }

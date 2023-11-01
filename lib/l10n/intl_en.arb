@@ -6,5 +6,8 @@
   "fortuneWheelTryAgain": "Try again",
   "fortuneWheelSpin": "Spin",
   "fortuneWheelDelay": "Next time at {time}",
+  "fortuneWheelWin": "Congratulations!",
+  "fortuneWheelWinReward": "You have won +{value} coins",
+  "fortuneWheelDefeat": "Better luck next time",
   "backToMenu": "Menu"
 }

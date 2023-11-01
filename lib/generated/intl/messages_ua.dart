@@ -22,14 +22,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(time) => "Наступний раз о ${time}";
 
+  static String m1(value) => "Ви виграли +${value} монет";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "backToMenu": MessageLookupByLibrary.simpleMessage("Меню"),
         "dailyBonus": MessageLookupByLibrary.simpleMessage("Щоденний бонус"),
+        "fortuneWheelDefeat":
+            MessageLookupByLibrary.simpleMessage("Пощастить іншим разом"),
         "fortuneWheelDelay": m0,
         "fortuneWheelSpin": MessageLookupByLibrary.simpleMessage("Обертати"),
         "fortuneWheelTryAgain":
             MessageLookupByLibrary.simpleMessage("Спробуй ще"),
+        "fortuneWheelWin": MessageLookupByLibrary.simpleMessage("Вітаємо!"),
+        "fortuneWheelWinReward": m1,
         "menuContinue": MessageLookupByLibrary.simpleMessage("Продовжити гру"),
         "menuNewGame": MessageLookupByLibrary.simpleMessage("Нова гра"),
         "menuRules": MessageLookupByLibrary.simpleMessage("Правила")

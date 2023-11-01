@@ -120,6 +120,36 @@ class S {
     );
   }
 
+  /// `Congratulations!`
+  String get fortuneWheelWin {
+    return Intl.message(
+      'Congratulations!',
+      name: 'fortuneWheelWin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have won +{value} coins`
+  String fortuneWheelWinReward(Object value) {
+    return Intl.message(
+      'You have won +$value coins',
+      name: 'fortuneWheelWinReward',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Better luck next time`
+  String get fortuneWheelDefeat {
+    return Intl.message(
+      'Better luck next time',
+      name: 'fortuneWheelDefeat',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Menu`
   String get backToMenu {
     return Intl.message(
