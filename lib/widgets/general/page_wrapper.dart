@@ -12,6 +12,7 @@ class PageWrapper extends StatelessWidget {
   final bool top;
   final bool right;
   final bool bottom;
+  final Image? backgroundImage;
   PageWrapper({
     super.key,
     Widget? child,
@@ -22,6 +23,7 @@ class PageWrapper extends StatelessWidget {
     this.top = true,
     this.right = true,
     this.bottom = true,
+    this.backgroundImage,
   })  : child = child ?? const SizedBox(),
         children = children ?? [];
 
@@ -33,7 +35,7 @@ class PageWrapper extends StatelessWidget {
         alignment: childrenAlignment,
         fit: StackFit.expand,
         children: [
-          Opacity(
+          backgroundImage ?? Opacity(
             opacity: 0.5,
             child: Image.asset(
               "assets/images/backgrounds/mask.png",

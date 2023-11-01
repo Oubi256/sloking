@@ -9,12 +9,6 @@ class StartGameInitProgressEvent extends GameProgressEvent {
   const StartGameInitProgressEvent();
 }
 
-class AddGemsGameProgressEvent extends GameProgressEvent {
-  final int gems;
-
-  const AddGemsGameProgressEvent(this.gems);
-}
-
 class FortuneWheelSpinProgressEvent extends GameProgressEvent {
   final int gemsAdd;
   final Duration delay;
@@ -22,16 +16,14 @@ class FortuneWheelSpinProgressEvent extends GameProgressEvent {
   const FortuneWheelSpinProgressEvent({this.gemsAdd = 0, this.delay = const Duration(days: 1)});
 }
 
-class HitOnHeartProgressEvent extends GameProgressEvent {
-  final int heartHitForce;
-
-  const HitOnHeartProgressEvent({this.heartHitForce = 1});
+class NewGameProgressEvent extends GameProgressEvent {
+  const NewGameProgressEvent();
 }
 
+class ContinueGameProgressEvent extends GameProgressEvent {
+  const ContinueGameProgressEvent();
+}
 
-class StartGameProgressEvent extends GameProgressEvent {
-  final int cardOnField;
-  final int combinationReward;
-
-  const StartGameProgressEvent({required this.cardOnField, required this.combinationReward});
+class FlipCardProgressEvent extends GameProgressEvent {
+  const FlipCardProgressEvent();
 }

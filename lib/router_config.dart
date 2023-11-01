@@ -1,7 +1,7 @@
 part of 'main.dart';
 
 GoRouter _routerConfig = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/home/game',
   routes: [
     GoRoute(
       path: '/splash',

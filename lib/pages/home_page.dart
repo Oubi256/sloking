@@ -82,13 +82,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Positioned(
-                      bottom: 150.r,
-                      top: 50.r,
-                      left: 50.r,
-                      right: 50.r,
-                      child: GestureDetector(
-                        onTap: () => context.go("/home/daily_bonus"),
-                      ),)
+                    bottom: 150.r,
+                    top: 50.r,
+                    left: 50.r,
+                    right: 50.r,
+                    child: GestureDetector(
+                      onTap: () => context.go("/home/daily_bonus"),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -102,7 +103,12 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ConvexTextButton(label: S.of(context).menuContinue, onPressed: () {}),
                   SizedBox(height: Constants.defaultPadding),
-                  ConvexTextButton(label: S.of(context).menuNewGame, onPressed: () {}),
+                  ConvexTextButton(
+                      label: S.of(context).menuNewGame,
+                      onPressed: () {
+                        context.read<GameProgressBloc>().add(const NewGameProgressEvent());
+                        context.go("/home/game");
+                      }),
                   SizedBox(height: Constants.defaultPadding),
                   ConvexTextButton(label: S.of(context).menuRules, onPressed: () => context.go("/home/rules")),
                 ],
