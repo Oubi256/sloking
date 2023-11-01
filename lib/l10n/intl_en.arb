@@ -2,5 +2,9 @@
   "dailyBonus": "Daily bonus",
   "menuContinue": "Continue",
   "menuNewGame": "New game",
-  "menuRules": "Rules"
+  "menuRules": "Rules",
+  "fortuneWheelTryAgain": "Try again",
+  "fortuneWheelSpin": "Spin",
+  "fortuneWheelDelay": "Next time at {time}",
+  "backToMenu": "Menu"
 }

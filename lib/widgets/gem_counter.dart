@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class DelayBonusPage extends StatelessWidget {
-  const DelayBonusPage({super.key});
+class GemCounter extends StatelessWidget {
+  const GemCounter({super.key});
 
   @override
   Widget build(BuildContext context) {

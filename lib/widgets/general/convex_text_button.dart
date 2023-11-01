@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sloking/constants.dart';
 
 class ConvexTextButton extends StatefulWidget {
   final double elevation;
@@ -54,6 +55,11 @@ class _ConvexTextButtonState extends State<ConvexTextButton> {
           _elevation = widget.elevation;
         });
       },
+      onTapCancel: () {
+        setState(() {
+          _elevation = widget.elevation;
+        });
+      },
       onTap: widget.onPressed,
       child: SizedBox(
         height: 62.h,
@@ -85,7 +91,7 @@ class _ConvexTextButtonState extends State<ConvexTextButton> {
               right: _emptyBorderSide(_enabled),
             ),
           ),
-          child: Text(widget.label, style: TextStyle(fontFamily: "Montserrat", fontWeight: FontWeight.w800, fontSize: 20.sp)),
+          child: Text(widget.label, style: Constants.buttonTextStyle),
         ),
       ),
     );

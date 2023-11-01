@@ -1,5 +1,5 @@
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class Constants {
@@ -9,4 +9,6 @@ abstract class Constants {
 
   static double defaultPadding = 20.r;
   static double smallPadding = 16.r;
+
+  static TextStyle buttonTextStyle = TextStyle(fontFamily: "Montserrat", fontWeight: FontWeight.w800, fontSize: 20.r);
 }

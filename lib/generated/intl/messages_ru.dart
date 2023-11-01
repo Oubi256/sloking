@@ -20,9 +20,16 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
+  static String m0(time) => "Следующий раз в ${time}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "backToMenu": MessageLookupByLibrary.simpleMessage("Меню"),
         "dailyBonus": MessageLookupByLibrary.simpleMessage("Ежедневный бонус"),
+        "fortuneWheelDelay": m0,
+        "fortuneWheelSpin": MessageLookupByLibrary.simpleMessage("Вращать"),
+        "fortuneWheelTryAgain":
+            MessageLookupByLibrary.simpleMessage("Попробуй еще"),
         "menuContinue": MessageLookupByLibrary.simpleMessage("Продолжить игру"),
         "menuNewGame": MessageLookupByLibrary.simpleMessage("Новая игра"),
         "menuRules": MessageLookupByLibrary.simpleMessage("Правила")

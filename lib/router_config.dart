@@ -1,7 +1,7 @@
 part of 'main.dart';
 
 GoRouter _routerConfig = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/home/daily_bonus',
   routes: [
     GoRoute(
       path: '/splash',
@@ -16,8 +16,8 @@ GoRouter _routerConfig = GoRouter(
           builder: (_, __) => RulesPage(),
         ),
         GoRoute(
-          path: 'delay_bonus',
-          builder: (_, __) => DelayBonusPage(),
+          path: 'daily_bonus',
+          builder: (_, __) => DailyBonusPage(),
         ),
         GoRoute(
           path: 'game',

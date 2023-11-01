@@ -2,5 +2,9 @@
   "dailyBonus": "Щоденний бонус",
   "menuContinue": "Продовжити гру",
   "menuNewGame": "Нова гра",
-  "menuRules": "Правила"
+  "menuRules": "Правила",
+  "fortuneWheelTryAgain": "Спробуй ще",
+  "fortuneWheelSpin": "Обертати",
+  "fortuneWheelDelay": "Наступний раз о {time}",
+  "backToMenu": "Меню"
 }

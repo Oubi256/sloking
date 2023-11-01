@@ -89,6 +89,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Try again`
+  String get fortuneWheelTryAgain {
+    return Intl.message(
+      'Try again',
+      name: 'fortuneWheelTryAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spin`
+  String get fortuneWheelSpin {
+    return Intl.message(
+      'Spin',
+      name: 'fortuneWheelSpin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next time at {time}`
+  String fortuneWheelDelay(Object time) {
+    return Intl.message(
+      'Next time at $time',
+      name: 'fortuneWheelDelay',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Menu`
+  String get backToMenu {
+    return Intl.message(
+      'Menu',
+      name: 'backToMenu',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
