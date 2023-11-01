@@ -5,17 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sloking/generated/l10n.dart';
 import 'package:sloking/widgets/wheel/fortune_wheel_item.dart';
 
 class DailyFortuneWheel extends StatefulWidget {
-  final List<FortuneWheelItem> items;
   final void Function()? onAnimationStart;
   final void Function()? onAnimationEnd;
+  final double width;
+  final double height;
+
   const DailyFortuneWheel({
     super.key,
-    required this.items,
     this.onAnimationStart,
     this.onAnimationEnd,
+    required this.width,
+    required this.height,
   });
 
   @override
@@ -23,6 +27,8 @@ class DailyFortuneWheel extends StatefulWidget {
 }
 
 class DailyFortuneWheelState extends State<DailyFortuneWheel> with TickerProviderStateMixin {
+  late List<FortuneWheelItem> items;
+
   bool playWinAnimation = true;
   late final StreamController<int> streamController = StreamController<int>();
   late final AnimationController animationController = AnimationController(vsync: this, duration: Duration(seconds: 3));
@@ -40,10 +46,10 @@ class DailyFortuneWheelState extends State<DailyFortuneWheel> with TickerProvide
   ]).animate(animationController);
 
   void spin() async {
-    final int spinResult = Fortune.randomInt(0, widget.items.length);
+    final int spinResult = Fortune.randomInt(0, items.length);
     setState(() {
       streamController.add(spinResult);
-      playWinAnimation = widget.items[spinResult].isWin;
+      playWinAnimation = items[spinResult].isWin;
     });
   }
 
@@ -64,64 +70,86 @@ class DailyFortuneWheelState extends State<DailyFortuneWheel> with TickerProvide
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        playWinAnimation
-            ? AnimatedBuilder(
-                animation: animationController,
-                builder: (_, __) {
-                  return Opacity(
-                    opacity: opacityAnimation.value,
-                    child: Stack(
-                      children: [
-                        Transform.rotate(
-                          angle: -pi / unionRotateAnimation.value,
-                          child: Opacity(
-                            opacity: 0.5,
-                            child: OverflowBox(
-                              maxWidth: 720.r,
-                              maxHeight: 720.r,
-                              child: Image.asset("assets/images/effect_union.png", fit: BoxFit.fill),
+    items = [
+      FortuneWheelItem.win(gemsReward: 5),
+      FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
+      FortuneWheelItem.win(gemsReward: 10),
+      FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
+      FortuneWheelItem.win(gemsReward: 50),
+      FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
+      FortuneWheelItem.win(gemsReward: 100),
+      FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
+      FortuneWheelItem.win(gemsReward: 10),
+      FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
+      FortuneWheelItem.win(gemsReward: 100),
+      FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
+    ];
+
+    return SizedBox(
+      height: widget.height,
+      width: widget.width,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          playWinAnimation
+              ? AnimatedBuilder(
+                  animation: animationController,
+                  builder: (_, __) {
+                    return Opacity(
+                      opacity: opacityAnimation.value,
+                      child: Stack(
+                        children: [
+                          Transform.rotate(
+                            angle: -pi / unionRotateAnimation.value,
+                            child: Opacity(
+                              opacity: 0.5,
+                              child: OverflowBox(
+                                maxWidth: 720.r,
+                                maxHeight: 720.r,
+                                child: Image.asset("assets/images/effect_union.png", fit: BoxFit.fill),
+                              ),
                             ),
                           ),
-                        ),
-                        OverflowBox(
-                          maxWidth: 550.r,
-                          maxHeight: 550.r,
-                          child: Image.asset("assets/images/wheel/effect_win_wheel_ellipse.png", fit: BoxFit.fill),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              )
-            : AnimatedBuilder(
-                animation: animationController,
-                builder: (_, __) {
-                  return Opacity(
-                    opacity: opacityAnimation.value,
-                    child: OverflowBox(
-                      maxWidth: 550.r,
-                      maxHeight: 550.r,
-                      child: Image.asset("assets/images/wheel/effect_defeat_wheel_ellipse.png", fit: BoxFit.fill),
-                    ),
-                  );
-                },
-              ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10), // png shadow fix
-          child: FortuneWheel(
-            animateFirst: false,
-            selected: streamController.stream,
-            physics: NoPanPhysics(),
-            indicators: const [],
-            items: widget.items,
-            onAnimationStart: _onAnimationStart,
-            onAnimationEnd: _onAnimationEnd,
+                          OverflowBox(
+                            maxWidth: 550.r,
+                            maxHeight: 550.r,
+                            child: Image.asset("assets/images/wheel/effect_win_wheel_ellipse.png", fit: BoxFit.fill),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )
+              : AnimatedBuilder(
+                  animation: animationController,
+                  builder: (_, __) {
+                    return Opacity(
+                      opacity: opacityAnimation.value,
+                      child: OverflowBox(
+                        maxWidth: 550.r,
+                        maxHeight: 550.r,
+                        child: Image.asset("assets/images/wheel/effect_defeat_wheel_ellipse.png", fit: BoxFit.fill),
+                      ),
+                    );
+                  },
+                ),
+          Container(
+            padding: EdgeInsets.only(bottom: 8.h),
+            height: widget.height,
+            width: widget.width,
+            child: FortuneWheel(
+              animateFirst: false,
+              selected: streamController.stream,
+              physics: NoPanPhysics(),
+              indicators: const [],
+              items: items,
+              onAnimationStart: _onAnimationStart,
+              onAnimationEnd: _onAnimationEnd,
+            ),
           ),
-        ),
-        Image.asset("assets/images/wheel/wheel.png", fit: BoxFit.fill)
-      ],
+          SizedBox(height: widget.height, width: widget.width, child: Image.asset("assets/images/wheel/wheel.png", fit: BoxFit.fill))
+        ],
+      ),
     );
   }
 }

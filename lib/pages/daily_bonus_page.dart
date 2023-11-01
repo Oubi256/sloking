@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sloking/constants.dart';
 import 'package:sloking/generated/l10n.dart';
 import 'package:sloking/widgets/wheel/daily_fortune_wheel.dart';
@@ -32,26 +33,13 @@ class _DailyBonusPageState extends State<DailyBonusPage> {
       children: [
         Positioned(
           bottom: 235.h,
-          height: 360.r,
-          width: 360.r,
+
           child: DailyFortuneWheel(
+            width: 360.r,
+            height: 360.r,
             onAnimationStart: _onWheelSpinStarted,
             onAnimationEnd: _onWheelSpinFinished,
             key: fortuneWheelKey,
-            items: [
-              FortuneWheelItem.win(gemsReward: 5),
-              FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
-              FortuneWheelItem.win(gemsReward: 10),
-              FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
-              FortuneWheelItem.win(gemsReward: 50),
-              FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
-              FortuneWheelItem.win(gemsReward: 100),
-              FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
-              FortuneWheelItem.win(gemsReward: 10),
-              FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
-              FortuneWheelItem.win(gemsReward: 100),
-              FortuneWheelItem.defeat(label: S.of(context).fortuneWheelTryAgain),
-            ],
           ),
         ),
         Positioned(
@@ -63,7 +51,7 @@ class _DailyBonusPageState extends State<DailyBonusPage> {
             children: [
               ConvexTextButton(label: S.of(context).fortuneWheelSpin, onPressed: isWheelSpinning ? null : _spinWheel),
               SizedBox(height: Constants.defaultPadding),
-              ConvexTextButton(label: S.of(context).backToMenu, onPressed: () {}),
+              ConvexTextButton(label: S.of(context).backToMenu, onPressed: () => context.go("/home")),
             ],
           ),
         ),
