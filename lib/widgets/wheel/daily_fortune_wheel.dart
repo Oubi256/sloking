@@ -13,6 +13,7 @@ class DailyFortuneWheel extends StatefulWidget {
   final void Function()? onAnimationEnd;
   final void Function(int reward)? onWin;
   final void Function()? onDefeat;
+  final void Function(int result)? onResult;
   final double width;
   final double height;
 
@@ -24,6 +25,7 @@ class DailyFortuneWheel extends StatefulWidget {
     required this.height,
     this.onWin,
     this.onDefeat,
+    this.onResult,
   });
 
   @override
@@ -56,6 +58,7 @@ class DailyFortuneWheelState extends State<DailyFortuneWheel> with TickerProvide
     setState(() {
       streamController.add(spinResult);
       playWinAnimation = items[spinResult].isWin;
+      widget.onResult?.call(items[spinResult].gemsReward);
     });
   }
 

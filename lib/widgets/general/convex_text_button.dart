@@ -64,6 +64,7 @@ class _ConvexTextButtonState extends State<ConvexTextButton> {
       child: SizedBox(
         height: 62.h,
         child: AnimatedContainer(
+          padding: EdgeInsets.symmetric(horizontal: Constants.defaultPadding),
           alignment: Alignment.center,
           margin: EdgeInsets.only(top: widget.elevation - _elevation),
           duration: widget.duration,
@@ -91,7 +92,7 @@ class _ConvexTextButtonState extends State<ConvexTextButton> {
               right: _emptyBorderSide(_enabled),
             ),
           ),
-          child: Text(widget.label, style: Constants.buttonTextStyle),
+          child: FittedBox(fit: BoxFit.fitWidth,child: Text(widget.label, style: Constants.buttonTextStyle)),
         ),
       ),
     );

@@ -6,6 +6,14 @@
   "fortuneWheelTryAgain": "Спробуй ще",
   "fortuneWheelSpin": "Обертати",
   "fortuneWheelDelay": "Наступний раз о {time}",
+  "@fortuneWheelDelay": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "jms"
+      }
+    }
+  },
   "fortuneWheelWin": "Вітаємо!",
   "fortuneWheelWinReward": "Ви виграли +{value} монет",
   "fortuneWheelDefeat": "Пощастить іншим разом",

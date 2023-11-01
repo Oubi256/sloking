@@ -111,12 +111,15 @@ class S {
   }
 
   /// `Next time at {time}`
-  String fortuneWheelDelay(Object time) {
+  String fortuneWheelDelay(DateTime time) {
+    final DateFormat timeDateFormat = DateFormat.jms(Intl.getCurrentLocale());
+    final String timeString = timeDateFormat.format(time);
+
     return Intl.message(
-      'Next time at $time',
+      'Next time at $timeString',
       name: 'fortuneWheelDelay',
       desc: '',
-      args: [time],
+      args: [timeString],
     );
   }
 

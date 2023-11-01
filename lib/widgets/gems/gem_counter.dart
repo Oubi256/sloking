@@ -8,7 +8,8 @@ import 'package:sloking/constants.dart';
 
 class GemCounter extends StatefulWidget {
   final int initialNumber;
-  const GemCounter({super.key, required this.initialNumber});
+  final int? value;
+  const GemCounter({super.key, this.initialNumber = 0, this.value});
 
   @override
   State<GemCounter> createState() => GemCounterState();
@@ -16,18 +17,20 @@ class GemCounter extends StatefulWidget {
 
 class GemCounterState extends State<GemCounter> with SingleTickerProviderStateMixin {
   late int _initialNumber;
+  late int _value;
   late final AnimationController animationController = AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
   @override
   void initState() {
     _initialNumber = widget.initialNumber;
+    _value = widget.value ?? _initialNumber;
     super.initState();
   }
 
   void addGems(int toAdd) {
     animationController.forward(from: 0);
     setState(() {
-      _initialNumber = _initialNumber + toAdd;
+      _value = _initialNumber + toAdd;
     });
   }
 
@@ -52,7 +55,7 @@ class GemCounterState extends State<GemCounter> with SingleTickerProviderStateMi
                 child: AnimatedFlipCounter(
                   curve: Curves.easeInOutCubic,
                   duration: Duration(milliseconds: 1400),
-                  value: _initialNumber,
+                  value: widget.value ?? _value,
                   textStyle: Constants.buttonTextStyle.copyWith(fontSize: 18.r),
                 )),
           ),

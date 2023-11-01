@@ -6,6 +6,14 @@
   "fortuneWheelTryAgain": "Try again",
   "fortuneWheelSpin": "Spin",
   "fortuneWheelDelay": "Next time at {time}",
+  "@fortuneWheelDelay": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "jms"
+      }
+    }
+  },
   "fortuneWheelWin": "Congratulations!",
   "fortuneWheelWinReward": "You have won +{value} coins",
   "fortuneWheelDefeat": "Better luck next time",

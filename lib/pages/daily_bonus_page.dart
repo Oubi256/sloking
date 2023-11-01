@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sloking/constants.dart';
@@ -7,6 +8,7 @@ import 'package:sloking/generated/l10n.dart';
 import 'package:sloking/widgets/gems/gem_counter.dart';
 import 'package:sloking/widgets/wheel/daily_fortune_wheel.dart';
 
+import '../bloc/game_progress_bloc/game_progress_bloc.dart';
 import '../widgets/general/convex_text_button.dart';
 import '../widgets/general/page_wrapper.dart';
 
@@ -60,13 +62,16 @@ class _DailyBonusPageState extends State<DailyBonusPage> with SingleTickerProvid
         Positioned(
           bottom: 235.h,
           child: DailyFortuneWheel(
+            key: fortuneWheelKey,
             width: 360.r,
             height: 360.r,
             onAnimationStart: _onWheelSpinStarted,
             onAnimationEnd: _onWheelSpinFinished,
             onWin: _onWin,
             onDefeat: _onDefeat,
-            key: fortuneWheelKey,
+            onResult: (result) {
+              context.read<GameProgressBloc>().add(FortuneWheelSpinProgressEvent(gemsAdd: result));
+            },
           ),
         ),
         Positioned(
@@ -76,13 +81,24 @@ class _DailyBonusPageState extends State<DailyBonusPage> with SingleTickerProvid
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ConvexTextButton(label: S.of(context).fortuneWheelSpin, onPressed: isWheelSpinning ? null : _spinWheel),
+              BlocBuilder<GameProgressBloc, GameProgressState>(
+                builder: (context, state) {
+                  final bool isSpinAllowed = state.nextWheelSpin.isBefore(DateTime.now());
+                  
+                  return ConvexTextButton(label: isSpinAllowed ? S.of(context).fortuneWheelSpin : S.of(context).fortuneWheelDelay(state.nextWheelSpin), onPressed: state.nextWheelSpin.isAfter(DateTime.now()) ?  null : _spinWheel);
+                },
+              ),
               SizedBox(height: Constants.defaultPadding),
               ConvexTextButton(label: S.of(context).backToMenu, onPressed: () => context.go("/home")),
             ],
           ),
         ),
-        Positioned(bottom: 597.h, child: GemCounter(key: gemCounterKey, initialNumber: 10)), // TODO: init from BloC/Hive
+        Positioned(
+            bottom: 597.h,
+            child: GemCounter(
+              key: gemCounterKey,
+              initialNumber: context.read<GameProgressBloc>().state.gemCount,
+            )), // TODO: init from BloC/Hive
         Positioned(top: 83.h, child: Text(S.of(context).dailyBonus.toUpperCase(), style: Constants.headerTextStyle)),
         Positioned(
           top: 128.h,
