@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:sloking/enums/game_card_state.dart';
+import 'package:sloking/enums/game_card_type.dart';
+import 'package:sloking/models/game_card.dart';
+import 'package:sloking/models/game_level_adapter.dart';
+import 'package:sloking/models/game_level_progress.dart';
 
 class HiveRepository {
   HiveRepository._();
@@ -20,7 +25,16 @@ class HiveRepository {
   }
 
   void _registerAdapters() {
-    //TODO: Сделать адаптер игрового процесса
+    Hive.registerAdapter(GameLevelProgressAdapter());
+    Hive.registerAdapter(GameLevelAdapter());
+    Hive.registerAdapter(GameCardAdapter());
+    Hive.registerAdapter(GameCardStateAdapter());
+    Hive.registerAdapter(GameCardTypeAdapter());
+
+
+
+
+    //Hive.registerAdapter(GameLevelAdapter());
   }
 
   Future<void> saveContent(String key, dynamic value) async {
@@ -29,7 +43,7 @@ class HiveRepository {
       final map = box.toMap();
       print("saved: {$key : ${map[key]}}");
     } catch (error) {
-      print("save error");
+      print("save error: $error");
     }
   }
 

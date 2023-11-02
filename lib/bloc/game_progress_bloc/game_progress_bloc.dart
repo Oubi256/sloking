@@ -5,12 +5,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_flip_card/flipcard/flip_card.dart';
 import 'package:meta/meta.dart';
-import 'package:sloking/enums/game_card_state_enum.dart';
+import 'package:sloking/enums/game_card_state.dart';
 import 'package:sloking/extensions/game_field_extension.dart';
 import 'package:sloking/game_levels.dart';
 import 'package:sloking/models/game_level_progress.dart';
 
-import '../../models/game_card.dart';
 import '../../models/game_level.dart';
 import '../../repositories/hive_repository.dart';
 
@@ -52,10 +51,11 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
   Future<void> _startInit(StartGameInitProgressEvent event, Emitter<GameProgressState> emit) async {
     final int? gemCount = await _hiveRepository.getContent("gemCount");
     final DateTime? nextWheelSpin = await _hiveRepository.getContent("nextWheelSpin");
-    //TODO: Need to load game progress
-    print("LOADED FROM HIVE:\n gemCount: $gemCount\n nextWheelSpin: $nextWheelSpin");
+    final GameLevelProgress? gameLevelProgress = await _hiveRepository.getContent("gameLevelProgress");
 
-    emit(LoadedGameProgressState(gemCount: gemCount ?? state.gemCount, nextWheelSpin: nextWheelSpin ?? state.nextWheelSpin, gameLevelProgress: state.gameLevelProgress));
+    print("LOADED FROM HIVE:\n gemCount: $gemCount\n nextWheelSpin: $nextWheelSpin\n gameLevelProgress: $gameLevelProgress");
+
+    emit(LoadedGameProgressState(gemCount: gemCount ?? state.gemCount, nextWheelSpin: nextWheelSpin ?? state.nextWheelSpin, gameLevelProgress: gameLevelProgress ?? state.gameLevelProgress));
   }
 
   Future<void> _fortuneWheelSpin(FortuneWheelSpinProgressEvent event, Emitter<GameProgressState> emit) async {
@@ -76,15 +76,19 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
     if (event.tryAgain) {
       newLevel = state.gameLevelProgress.gameLevel;
     }
-     emit(LoadedGameProgressState(
+    newLevel = newLevel ?? gameLevels.first;
+
+    final GameLevelProgress gameLevelProgress = GameLevelProgress.startGame(gameLevel: newLevel);
+    _hiveRepository.saveContent("gameLevelProgress", gameLevelProgress);
+
+    emit(LoadedGameProgressState(
       gemCount: state.gemCount,
       nextWheelSpin: state.nextWheelSpin,
-      gameLevelProgress: GameLevelProgress.startGame(gameLevel: newLevel ?? gameLevels.first),
+      gameLevelProgress: gameLevelProgress,
     ));
   }
 
   Future<void> _continueGame(ContinueGameProgressEvent event, Emitter<GameProgressState> emit) async {
-    print("continue: ${state.gameLevelProgress.gameField.map((e) => e.state).toList()}");
     emit(LoadedGameProgressState(
       gemCount: state.gemCount,
       nextWheelSpin: state.nextWheelSpin,
@@ -93,12 +97,11 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
   }
 
   Future<void> _changeCardState(ChangeCardStateProgressEvent event, Emitter<GameProgressState> emit) async {
-    GameCard flippedCard = state.gameLevelProgress.gameField[event.cardIndex];
-    print("FLIP CARD: ${flippedCard.state} | ${flippedCard.type.name}");
     GameLevelProgress updatedProgress = state.gameLevelProgress.copyWith(
       gameField: state.gameLevelProgress.gameField.changeCardState(event.cardIndex, event.newCardState),
     );
-    print("flip: ${updatedProgress.gameField.map((e) => e.state).toList()}");
+
+    _hiveRepository.saveContent("gameLevelProgress", updatedProgress);
 
     emit(LoadedGameProgressState(
       gemCount: state.gemCount,
@@ -111,6 +114,9 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
     GameLevelProgress updatedProgress = state.gameLevelProgress.copyWith(
       healthCount: state.gameLevelProgress.healthCount - 1,
     );
+
+    _hiveRepository.saveContent("gameLevelProgress", updatedProgress);
+
     emit(LoadedGameProgressState(
       gemCount: state.gemCount,
       nextWheelSpin: state.nextWheelSpin,

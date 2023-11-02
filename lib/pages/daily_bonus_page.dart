@@ -50,12 +50,6 @@ class _DailyBonusPageState extends State<DailyBonusPage> with SingleTickerProvid
   final GlobalKey<GemCounterState> gemCounterKey = GlobalKey<GemCounterState>();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return PageWrapper(
       children: [
@@ -84,7 +78,7 @@ class _DailyBonusPageState extends State<DailyBonusPage> with SingleTickerProvid
               BlocBuilder<GameProgressBloc, GameProgressState>(
                 builder: (context, state) {
                   final bool isSpinAllowed = state.nextWheelSpin.isBefore(DateTime.now());
-                  
+
                   return ConvexTextButton(label: isSpinAllowed ? S.of(context).fortuneWheelSpin : S.of(context).fortuneWheelDelay(state.nextWheelSpin), onPressed: state.nextWheelSpin.isAfter(DateTime.now()) ?  null : _spinWheel);
                 },
               ),
@@ -98,7 +92,7 @@ class _DailyBonusPageState extends State<DailyBonusPage> with SingleTickerProvid
             child: GemCounter(
               key: gemCounterKey,
               initialNumber: context.read<GameProgressBloc>().state.gemCount,
-            )), // TODO: init from BloC/Hive
+            )),
         Positioned(top: 83.h, child: Text(S.of(context).dailyBonus.toUpperCase(), style: Constants.headerTextStyle)),
         Positioned(
           top: 128.h,

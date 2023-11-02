@@ -1,19 +1,29 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:sloking/models/game_card.dart';
 
+import '../enums/game_card_type.dart';
 import 'game_level_progress.dart';
 
-class GameLevel {
+//part 'game_level.g.dart';
+
+
+class GameLevel extends HiveObject {
   final int id;
-  final Image backgroundImage;
+
+  final Image? backgroundImage;
+
   final int row;
+
   final int column;
+
   final int combinationReward;
+
   final int minUniqueCards;
 
-  const GameLevel({
+   GameLevel({
     required this.id,
     required this.row,
     required this.column,

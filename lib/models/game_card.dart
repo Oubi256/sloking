@@ -1,23 +1,11 @@
-import 'package:sloking/enums/game_card_state_enum.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:sloking/enums/game_card_state.dart';
 
-enum GameCardType {
-  lemon(iconAssetName: "assets/images/card/icons/slots_01.png"),
-  watermelon(iconAssetName: "assets/images/card/icons/slots_02.png"),
-  plum(iconAssetName: "assets/images/card/icons/slots_03.png"),
-  strawberry(iconAssetName: "assets/images/card/icons/slots_04.png"),
-  cherry(iconAssetName: "assets/images/card/icons/slots_05.png");
+import '../enums/game_card_type.dart';
 
-  const GameCardType({
-    required this.iconAssetName,
-    this.backAssetName = "assets/images/card/backgrounds/card_back.png",
-    this.faceAssetName = "assets/images/card/backgrounds/card_face.png",
-  });
+part 'game_card.g.dart';
 
-  final String iconAssetName;
-  final String backAssetName;
-  final String faceAssetName;
-}
-
+@HiveType(typeId: 2)
 class GameCard {
   const GameCard({
     required this.type,
@@ -68,6 +56,9 @@ class GameCard {
     );
   }
 
+  @HiveField(0)
   final GameCardType type;
+
+  @HiveField(1)
   final GameCardState state;
 }

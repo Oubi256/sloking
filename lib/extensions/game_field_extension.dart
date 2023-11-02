@@ -1,4 +1,4 @@
-import 'package:sloking/enums/game_card_state_enum.dart';
+import 'package:sloking/enums/game_card_state.dart';
 
 import '../models/game_level_progress.dart';
 

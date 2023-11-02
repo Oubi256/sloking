@@ -6,7 +6,7 @@ import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sloking/bloc/game_progress_bloc/game_progress_bloc.dart';
 import 'package:sloking/constants.dart';
-import 'package:sloking/enums/game_card_state_enum.dart';
+import 'package:sloking/enums/game_card_state.dart';
 import 'package:sloking/extensions/game_field_extension.dart';
 import 'package:sloking/generated/l10n.dart';
 
