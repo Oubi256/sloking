@@ -31,6 +31,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "addGemsHint": m0,
         "backToMenu": MessageLookupByLibrary.simpleMessage("Меню"),
         "dailyBonus": MessageLookupByLibrary.simpleMessage("Ежедневный бонус"),
+        "dialogButtonNextLevel":
+            MessageLookupByLibrary.simpleMessage("Следующий уровень"),
+        "dialogButtonTryAgain":
+            MessageLookupByLibrary.simpleMessage("Попробовать еще"),
+        "dialogDefeatHeader":
+            MessageLookupByLibrary.simpleMessage("ИГРА ОКОНЧЕНА!"),
+        "dialogWinHeader": MessageLookupByLibrary.simpleMessage("ПОБЕДА!"),
         "fortuneWheelDefeat":
             MessageLookupByLibrary.simpleMessage("Повезет в другой раз"),
         "fortuneWheelDelay": m1,

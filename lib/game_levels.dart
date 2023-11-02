@@ -3,6 +3,7 @@ import 'package:sloking/models/game_level.dart';
 
 final List<GameLevel> gameLevels = [
   GameLevel(
+    id: 0,
     row: 2,
     column: 3,
     backgroundImage: Image.asset(
@@ -14,6 +15,7 @@ final List<GameLevel> gameLevels = [
     minUniqueCards: 3,
   ),
   GameLevel(
+    id: 1,
     row: 2,
     column: 4,
     backgroundImage: Image.asset(

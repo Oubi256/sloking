@@ -11,6 +11,8 @@ import 'package:sloking/extensions/game_field_extension.dart';
 import 'package:sloking/generated/l10n.dart';
 
 import 'package:sloking/models/game_level_progress.dart';
+import 'package:sloking/widgets/dialogs/defeat_game_dialog.dart';
+import 'package:sloking/widgets/dialogs/win_game_dialog.dart';
 import 'package:sloking/widgets/gems/gem_counter.dart';
 import 'package:sloking/widgets/general/page_wrapper.dart';
 import 'package:stroke_text/stroke_text.dart';
@@ -53,6 +55,12 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     _generateCardControllers(gameLevelProgress);
     WidgetsBinding.instance.addPostFrameCallback((_) => _continueGame(gameLevelProgress));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    hintAnimationController.dispose();
+    super.dispose();
   }
 
   bool _canFlipCard(int index) {
@@ -100,9 +108,19 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     context.read<GameProgressBloc>().add(HealthHitProgressEvent());
   }
 
-  void _gameLoop(GameLevelProgress gameLevelProgress) async {
+  void _gameLoop(GameLevelProgress gameLevelProgress, int gemCount) async {
     _updateIndexes(gameLevelProgress);
     //print("o: ${openedCardIndexes.length} | c: ${closedCardIndexes.length} | h:${hidedCardIndexes.length}");
+
+    if(gameLevelProgress.healthCount == 0) {
+      _onDefeatGame(gemCount);
+    }
+
+    if(openedCardIndexes.isEmpty && closedCardIndexes.isEmpty) {
+      Future.delayed(_animationDuration, () {
+        _onWinGame(gemCount, gameLevelProgress.healthCount);
+      });
+    }
 
     // card opening handler
     for (int openedCardIndex in openedCardIndexes) {
@@ -144,11 +162,31 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     }
   }
 
+  void _onDefeatGame(int gemCount) {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return DefeatGameDialog(gemCount: gemCount);
+        });
+  }
+
+  void _onWinGame(int gemCount, int healthCount) {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return WinGameDialog(gemCount: gemCount, healthCount: healthCount,);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GameProgressBloc, GameProgressState>(
       listener: (context, state) {
-        _gameLoop(state.gameLevelProgress);
+        _gameLoop(state.gameLevelProgress, state.gemCount);
       },
       builder: (context, state) {
         return PageWrapper(

@@ -6,6 +6,7 @@ import 'package:sloking/models/game_card.dart';
 import 'game_level_progress.dart';
 
 class GameLevel {
+  final int id;
   final Image backgroundImage;
   final int row;
   final int column;
@@ -13,6 +14,7 @@ class GameLevel {
   final int minUniqueCards;
 
   const GameLevel({
+    required this.id,
     required this.row,
     required this.column,
     required this.backgroundImage,

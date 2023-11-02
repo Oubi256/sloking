@@ -17,7 +17,9 @@ class FortuneWheelSpinProgressEvent extends GameProgressEvent {
 }
 
 class NewGameProgressEvent extends GameProgressEvent {
-  const NewGameProgressEvent();
+  final bool nextLevel;
+  final bool tryAgain;
+  const NewGameProgressEvent({this.nextLevel = false, this.tryAgain = false});
 }
 
 class ContinueGameProgressEvent extends GameProgressEvent {

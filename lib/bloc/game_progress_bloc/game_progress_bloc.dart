@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ import 'package:sloking/game_levels.dart';
 import 'package:sloking/models/game_level_progress.dart';
 
 import '../../models/game_card.dart';
+import '../../models/game_level.dart';
 import '../../repositories/hive_repository.dart';
 
 part 'game_progress_event.dart';
@@ -65,10 +67,19 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
   }
 
   Future<void> _newGame(NewGameProgressEvent event, Emitter<GameProgressState> emit) async {
-    emit(LoadedGameProgressState(
+    GameLevel? newLevel;
+    if (event.nextLevel) {
+      newLevel = gameLevels[min(state.gameLevelProgress.gameLevel.id + 1, gameLevels.length-1)];
+      print("SELECTED LEVEL: ${newLevel.id}");
+    }
+
+    if (event.tryAgain) {
+      newLevel = state.gameLevelProgress.gameLevel;
+    }
+     emit(LoadedGameProgressState(
       gemCount: state.gemCount,
       nextWheelSpin: state.nextWheelSpin,
-      gameLevelProgress: GameLevelProgress.startGame(gameLevel: gameLevels.first),
+      gameLevelProgress: GameLevelProgress.startGame(gameLevel: newLevel ?? gameLevels.first),
     ));
   }
 

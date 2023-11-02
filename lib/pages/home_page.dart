@@ -10,7 +10,10 @@ import 'package:sloking/generated/l10n.dart';
 import 'package:sloking/widgets/gems/gem_counter.dart';
 import 'package:sloking/widgets/general/convex_text_button.dart';
 import 'package:sloking/widgets/general/page_wrapper.dart';
+import 'package:sloking/widgets/health/health_bar.dart';
 import 'package:sloking/widgets/wheel/daily_fortune_wheel.dart';
+
+import '../game_levels.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -101,15 +104,18 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ConvexTextButton(label: S.of(context).menuContinue, onPressed: () {
-                    context.read<GameProgressBloc>().add(const ContinueGameProgressEvent());
-                    context.go("/home/game");
-                  }),
+                  ConvexTextButton(
+                      label: S.of(context).menuContinue,
+                      onPressed: () {
+                        context.read<GameProgressBloc>().add(const ContinueGameProgressEvent());
+                        context.go("/home/game");
+
+                      }),
                   SizedBox(height: Constants.defaultPadding),
                   ConvexTextButton(
                       label: S.of(context).menuNewGame,
                       onPressed: () {
-                        context.read<GameProgressBloc>().add(const NewGameProgressEvent());
+                        context.read<GameProgressBloc>().add(NewGameProgressEvent());
                         context.go("/home/game");
                       }),
                   SizedBox(height: Constants.defaultPadding),

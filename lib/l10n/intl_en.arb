@@ -21,5 +21,9 @@
   "rulesCards": "You need to collect several items that are hidden under the cards.",
   "rulesGems": "For each pair you collect, you get diamonds.",
   "rulesHealth": "If an attempt is unsuccessful, you will lose one heart. When you run out of hearts, the game is over.",
-  "addGemsHint": "+{value} diamonds"
+  "addGemsHint": "+{value} diamonds",
+  "dialogWinHeader": "WIN!",
+  "dialogDefeatHeader": "GAME OVER!",
+  "dialogButtonNextLevel": "Next level",
+  "dialogButtonTryAgain": "Try Again."
 }

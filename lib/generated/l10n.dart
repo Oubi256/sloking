@@ -202,6 +202,46 @@ class S {
       args: [value],
     );
   }
+
+  /// `WIN!`
+  String get dialogWinHeader {
+    return Intl.message(
+      'WIN!',
+      name: 'dialogWinHeader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `GAME OVER!`
+  String get dialogDefeatHeader {
+    return Intl.message(
+      'GAME OVER!',
+      name: 'dialogDefeatHeader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next level`
+  String get dialogButtonNextLevel {
+    return Intl.message(
+      'Next level',
+      name: 'dialogButtonNextLevel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try Again.`
+  String get dialogButtonTryAgain {
+    return Intl.message(
+      'Try Again.',
+      name: 'dialogButtonTryAgain',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
