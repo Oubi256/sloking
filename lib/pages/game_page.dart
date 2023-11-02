@@ -96,7 +96,9 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     hintAnimationController.forward(from: 0);
   }
 
-  void _onComparedFailure() {}
+  void _onComparedFailure() {
+    context.read<GameProgressBloc>().add(HealthHitProgressEvent());
+  }
 
   void _gameLoop(GameLevelProgress gameLevelProgress) async {
     _updateIndexes(gameLevelProgress);
