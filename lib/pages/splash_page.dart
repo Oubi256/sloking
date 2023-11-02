@@ -13,7 +13,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<GameProgressBloc, GameProgressState>(
       listener: (context, state) {
-        Future.delayed(Duration(seconds: 1), () => context.go("/home"));
+        Future.delayed(Duration(seconds: 2), () => context.go("/home"));
         //context.go("/home");
       },
       child: PageWrapper(

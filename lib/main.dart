@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         child: ScreenUtilInit(
           designSize: const Size(412, 832),
           builder: (_, __) => MaterialApp.router(
+            title: "Sloking",
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
             supportedLocales: S.delegate.supportedLocales,
             debugShowCheckedModeBanner: false,
             routerConfig: _routerConfig,
-            showPerformanceOverlay: true,
+            showPerformanceOverlay: false,
           ),
         ),
       ),
