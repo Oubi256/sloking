@@ -162,6 +162,36 @@ class S {
       args: [],
     );
   }
+
+  /// `You need to collect several items that are hidden under the cards.`
+  String get rulesCards {
+    return Intl.message(
+      'You need to collect several items that are hidden under the cards.',
+      name: 'rulesCards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For each pair you collect, you get diamonds.`
+  String get rulesGems {
+    return Intl.message(
+      'For each pair you collect, you get diamonds.',
+      name: 'rulesGems',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If an attempt is unsuccessful, you will lose one heart. When you run out of hearts, the game is over.`
+  String get rulesHealth {
+    return Intl.message(
+      'If an attempt is unsuccessful, you will lose one heart. When you run out of hearts, the game is over.',
+      name: 'rulesHealth',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

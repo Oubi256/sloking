@@ -13,4 +13,6 @@ abstract class Constants {
 
   static TextStyle buttonTextStyle = TextStyle(fontFamily: "Montserrat", fontWeight: FontWeight.w800, fontSize: 20.r);
   static TextStyle headerTextStyle = TextStyle(fontFamily: "Montserrat", fontWeight: FontWeight.w800, fontSize: 30.r, color: Colors.white);
+  static TextStyle descriptionTextStyle = TextStyle(fontFamily: "Montserrat", fontWeight: FontWeight.w600, fontSize: 18.r, color: Colors.white);
+
 }

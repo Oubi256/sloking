@@ -39,6 +39,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "fortuneWheelWinReward": m1,
         "menuContinue": MessageLookupByLibrary.simpleMessage("Continue"),
         "menuNewGame": MessageLookupByLibrary.simpleMessage("New game"),
-        "menuRules": MessageLookupByLibrary.simpleMessage("Rules")
+        "menuRules": MessageLookupByLibrary.simpleMessage("Rules"),
+        "rulesCards": MessageLookupByLibrary.simpleMessage(
+            "You need to collect several items that are hidden under the cards."),
+        "rulesGems": MessageLookupByLibrary.simpleMessage(
+            "For each pair you collect, you get diamonds."),
+        "rulesHealth": MessageLookupByLibrary.simpleMessage(
+            "If an attempt is unsuccessful, you will lose one heart. When you run out of hearts, the game is over.")
       };
 }

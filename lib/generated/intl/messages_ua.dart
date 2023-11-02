@@ -38,6 +38,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "fortuneWheelWinReward": m1,
         "menuContinue": MessageLookupByLibrary.simpleMessage("Продовжити гру"),
         "menuNewGame": MessageLookupByLibrary.simpleMessage("Нова гра"),
-        "menuRules": MessageLookupByLibrary.simpleMessage("Правила")
+        "menuRules": MessageLookupByLibrary.simpleMessage("Правила"),
+        "rulesCards": MessageLookupByLibrary.simpleMessage(
+            "Вам потрібно збирати кілька елементів, які заховані під картками."),
+        "rulesGems": MessageLookupByLibrary.simpleMessage(
+            "За кожну зібрану пару ви отримуєте алмази."),
+        "rulesHealth": MessageLookupByLibrary.simpleMessage(
+            "Якщо спроба буде невдалою, ви втрачатимете одне серце. Коли у вас закінчаться серця, гра буде закінчена.")
       };
 }
