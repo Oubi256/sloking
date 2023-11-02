@@ -23,11 +23,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isHaveProgress = false;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GameProgressBloc, GameProgressState>(
+    return BlocConsumer<GameProgressBloc, GameProgressState>(
+      listener: (_, currentState) {
+        isHaveProgress = currentState.gameLevelProgress.healthCount != 0;
+      },
       buildWhen: (prevState, currentState) {
-        return prevState.gemCount != currentState.gemCount;
+        return prevState.gemCount != currentState.gemCount || isHaveProgress;
       },
       builder: (context, state) {
         return PageWrapper(
@@ -105,12 +110,14 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ConvexTextButton(
-                      label: S.of(context).menuContinue,
-                      onPressed: () {
-                        context.read<GameProgressBloc>().add(const ContinueGameProgressEvent());
-                        context.go("/home/game");
-
-                      }),
+                    label: S.of(context).menuContinue,
+                    onPressed: isHaveProgress
+                        ? () {
+                            context.read<GameProgressBloc>().add(const ContinueGameProgressEvent());
+                            context.go("/home/game");
+                          }
+                        : null,
+                  ),
                   SizedBox(height: Constants.defaultPadding),
                   ConvexTextButton(
                       label: S.of(context).menuNewGame,

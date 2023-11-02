@@ -68,9 +68,10 @@ class WinGameDialog extends StatelessWidget {
                         ConvexTextButton(
                             label: S.of(context).backToMenu,
                             onPressed: () {
-                              context.pop();
-                              context.read<GameProgressBloc>().add( NewGameProgressEvent());
-                              context.pop();
+                              context.pop(); // close modal
+                              context.pop(); // TODO: need fix double pop to home
+                              context.pop(); // TODO: need fix double pop to home
+                              context.read<GameProgressBloc>().add( NewGameProgressEvent(tryAgain: true));
                             }),
                       ],
                     ),

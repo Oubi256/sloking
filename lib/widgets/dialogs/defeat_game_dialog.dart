@@ -17,7 +17,6 @@ class DefeatGameDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("gem count: $gemCount");
     return Dialog(
       elevation: 0,
       surfaceTintColor: Colors.transparent,
@@ -64,9 +63,10 @@ class DefeatGameDialog extends StatelessWidget {
                         ConvexTextButton(
                             label: S.of(context).backToMenu,
                             onPressed: () {
-                              context.pop();
-                              context.read<GameProgressBloc>().add( NewGameProgressEvent());
-                              context.pop();
+                              print("canPop1: ${GoRouter.of(context).canPop()}");
+                              context.pop(); // close modal
+                              print("canPop2: ${GoRouter.of(context).canPop()}");
+                              context.pop(); // to home
                             }),
                       ],
                     ),
