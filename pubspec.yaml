@@ -25,6 +25,7 @@ dependencies:
   flutter_flip_card: ^0.0.4
   stroke_text: ^0.0.2
   bordered_text: ^2.0.0
+  webview_flutter: ^4.4.1
 
 dev_dependencies:
   flutter_test:
