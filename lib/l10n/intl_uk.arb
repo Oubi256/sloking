@@ -10,7 +10,8 @@
     "placeholders": {
       "time": {
         "type": "DateTime",
-        "format": "jms"
+        "format": "hh:mm:ss",
+        "isCustomDateFormat": "true"
       }
     }
   },

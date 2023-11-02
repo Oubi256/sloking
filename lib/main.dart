@@ -16,6 +16,8 @@ import 'package:sloking/repositories/hive_repository.dart';
 part 'router_config.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await ScreenUtil.ensureScreenSize();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

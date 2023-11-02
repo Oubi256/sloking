@@ -34,7 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogButtonNextLevel":
             MessageLookupByLibrary.simpleMessage("Next level"),
         "dialogButtonTryAgain":
-            MessageLookupByLibrary.simpleMessage("Try Again."),
+            MessageLookupByLibrary.simpleMessage("Try again"),
         "dialogDefeatHeader":
             MessageLookupByLibrary.simpleMessage("GAME OVER!"),
         "dialogWinHeader": MessageLookupByLibrary.simpleMessage("WIN!"),

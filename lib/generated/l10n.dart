@@ -112,7 +112,8 @@ class S {
 
   /// `Next time at {time}`
   String fortuneWheelDelay(DateTime time) {
-    final DateFormat timeDateFormat = DateFormat.jms(Intl.getCurrentLocale());
+    final DateFormat timeDateFormat =
+        DateFormat('H:mm:ss', Intl.getCurrentLocale());
     final String timeString = timeDateFormat.format(time);
 
     return Intl.message(
@@ -233,10 +234,10 @@ class S {
     );
   }
 
-  /// `Try Again.`
+  /// `Try again`
   String get dialogButtonTryAgain {
     return Intl.message(
-      'Try Again.',
+      'Try again',
       name: 'dialogButtonTryAgain',
       desc: '',
       args: [],
@@ -251,7 +252,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'ru'),
-      Locale.fromSubtags(languageCode: 'ua'),
+      Locale.fromSubtags(languageCode: 'uk'),
     ];
   }
 

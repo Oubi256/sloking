@@ -10,7 +10,8 @@
     "placeholders": {
       "time": {
         "type": "DateTime",
-        "format": "jms"
+        "format": "H:mm:ss",
+        "isCustomDateFormat": "true"
       }
     }
   },
@@ -25,5 +26,5 @@
   "dialogWinHeader": "WIN!",
   "dialogDefeatHeader": "GAME OVER!",
   "dialogButtonNextLevel": "Next level",
-  "dialogButtonTryAgain": "Try Again."
+  "dialogButtonTryAgain": "Try again"
 }
