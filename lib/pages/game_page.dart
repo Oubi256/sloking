@@ -1,3 +1,4 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +8,14 @@ import 'package:sloking/bloc/game_progress_bloc/game_progress_bloc.dart';
 import 'package:sloking/constants.dart';
 import 'package:sloking/enums/game_card_state_enum.dart';
 import 'package:sloking/extensions/game_field_extension.dart';
+import 'package:sloking/generated/l10n.dart';
 
 import 'package:sloking/models/game_level_progress.dart';
 import 'package:sloking/widgets/gems/gem_counter.dart';
 import 'package:sloking/widgets/general/page_wrapper.dart';
+import 'package:stroke_text/stroke_text.dart';
+
+import '../widgets/health/health_bar.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -19,9 +24,28 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin {
   late List<FlipCardController?> cardControllers;
   final Duration _animationDuration = Duration(milliseconds: 500);
+  late final AnimationController hintAnimationController = AnimationController(vsync: this, duration: _animationDuration*2);
+
+  final Tween<double> firstOpacityHalfTween = Tween(begin: 0, end: 1);
+  final Tween<double> secondOpacityHalfTween = Tween(begin: 1, end: 1);
+  final Tween<double> thirdOpacityHalfTween = Tween(begin: 1, end: 0);
+
+  late final Animation<double> hintOpacityAnimation = TweenSequence<double>([
+    TweenSequenceItem(tween: firstOpacityHalfTween, weight: 0.05),
+    TweenSequenceItem(tween: secondOpacityHalfTween, weight: 0.4),
+    TweenSequenceItem(tween: thirdOpacityHalfTween, weight: 0.3),
+  ]).animate(hintAnimationController);
+
+  late final Animation<Offset> hintOffsetAnimation = Tween<Offset>(
+    begin: Offset(0, -10),
+    end: Offset(0, 0),
+  ).animate(CurvedAnimation(
+    parent: hintAnimationController,
+    curve: Curves.ease,
+  ));
 
   @override
   void initState() {
@@ -68,9 +92,11 @@ class _GamePageState extends State<GamePage> {
   }
 
   void _onComparedSuccessful() {
+    context.read<GameProgressBloc>().add(AddGemsProgressEvent());
+    hintAnimationController.forward(from: 0);
   }
-  void _onComparedFailure() {}
 
+  void _onComparedFailure() {}
 
   void _gameLoop(GameLevelProgress gameLevelProgress) async {
     _updateIndexes(gameLevelProgress);
@@ -98,21 +124,20 @@ class _GamePageState extends State<GamePage> {
     if (openedCardIndexes.length == 2) {
       if (gameLevelProgress.gameField[openedCardIndexes.first].type == gameLevelProgress.gameField[openedCardIndexes.last].type) {
         isAnimationInProgress.value = true;
-        _onComparedSuccessful();
         Future.delayed(_animationDuration, () {
           context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.first, newCardState: GameCardState.hidden));
           context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.last, newCardState: GameCardState.hidden));
+          _onComparedSuccessful();
           isAnimationInProgress.value = false;
         });
       } else {
         isAnimationInProgress.value = true;
-        _onComparedFailure();
         Future.delayed(_animationDuration, () {
           context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.first, newCardState: GameCardState.closed));
           context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.last, newCardState: GameCardState.closed));
+          _onComparedFailure();
           isAnimationInProgress.value = false;
         });
-
       }
     }
   }
@@ -130,56 +155,86 @@ class _GamePageState extends State<GamePage> {
             fit: BoxFit.cover,
             alignment: Alignment(0.4, 0),
           ),
-          child: Column(
-            children: [
-              GemCounter(),
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.all(Constants.smallPadding),
-                  child: Center(
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: state.gameLevelProgress.gameLevel.column,
-                        childAspectRatio: 2 / 2.5,
-                        mainAxisSpacing: Constants.smallPadding,
-                        crossAxisSpacing: Constants.smallPadding,
-                      ),
-                      itemCount: state.gameLevelProgress.gameLevel.itemsCount,
-                      itemBuilder: (_, index) {
-                        return AnimatedCrossFade(
-                          firstChild: GestureDetector(
-                            onTap: () => _onTapCard(index),
-                            child: FlipCard(
-                              animationDuration: _animationDuration,
-                              axis: FlipAxis.vertical,
-                              backWidget: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(state.gameLevelProgress.gameField[index].type.faceAssetName),
-                                  Padding(
-                                    padding: EdgeInsets.all(10.r),
-                                    child: Image.asset(state.gameLevelProgress.gameField[index].type.iconAssetName),
-                                  ),
-                                ],
-                              ),
-                              frontWidget: Image.asset(state.gameLevelProgress.gameField[index].type.backAssetName),
-                              controller: cardControllers[index]!,
-                              rotateSide: RotateSide.left,
-                            ),
-                          ),
-                          secondChild: SizedBox(),
-                          crossFadeState: state.gameLevelProgress.gameField[index].state != GameCardState.hidden ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                          duration: _animationDuration,
-                        );
-                      },
-                    ),
+          children: [
+            Positioned(
+              top: 110.h,
+              left: Constants.smallPadding,
+              right: Constants.smallPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GemCounter(
+                    value: state.gemCount,
                   ),
-                ),
-              )
-            ],
-          ),
+                  HealthBar(value: state.gameLevelProgress.healthCount),
+                ],
+              ),
+            ),
+            Positioned(
+                top: 183.h,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AnimatedBuilder(
+                        animation: hintAnimationController,
+                        child: Text(
+                          S.of(context).addGemsHint(state.gameLevelProgress.gameLevel.combinationReward),
+                          style: Constants.addGemsHintOutlineTextStyle,
+                        ),
+                        builder: (_, child) {
+                          return Transform.translate(
+                            offset: hintOffsetAnimation.value,
+                            child: Opacity(
+                              opacity: hintOpacityAnimation.value,
+                              child: child,
+                            ),
+                          );
+                        })
+                  ],
+                )),
+            Positioned(
+                top: 265.h,
+                left: Constants.smallPadding,
+                right: Constants.smallPadding,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: state.gameLevelProgress.gameLevel.column,
+                    childAspectRatio: 2 / 2.5,
+                    mainAxisSpacing: Constants.smallPadding,
+                    crossAxisSpacing: Constants.smallPadding,
+                  ),
+                  itemCount: state.gameLevelProgress.gameLevel.itemsCount,
+                  itemBuilder: (_, index) {
+                    return AnimatedCrossFade(
+                      firstChild: GestureDetector(
+                        onTap: () => _onTapCard(index),
+                        child: FlipCard(
+                          animationDuration: _animationDuration,
+                          axis: FlipAxis.vertical,
+                          backWidget: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(state.gameLevelProgress.gameField[index].type.faceAssetName),
+                              Padding(
+                                padding: EdgeInsets.all(10.r),
+                                child: Image.asset(state.gameLevelProgress.gameField[index].type.iconAssetName),
+                              ),
+                            ],
+                          ),
+                          frontWidget: Image.asset(state.gameLevelProgress.gameField[index].type.backAssetName),
+                          controller: cardControllers[index]!,
+                          rotateSide: RotateSide.left,
+                        ),
+                      ),
+                      secondChild: SizedBox(),
+                      crossFadeState: state.gameLevelProgress.gameField[index].state != GameCardState.hidden ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                      duration: _animationDuration,
+                    );
+                  },
+                ))
+          ],
         );
       },
     );

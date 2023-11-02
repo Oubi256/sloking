@@ -30,6 +30,9 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
     on<NewGameProgressEvent>(_newGame);
     on<ContinueGameProgressEvent>(_continueGame);
     on<ChangeCardStateProgressEvent>(_changeCardState);
+    on<HealthHitProgressEvent>(_healthHit);
+    on<AddGemsProgressEvent>(_addGems);
+
   }
 
   void hiveInitListener() {
@@ -90,6 +93,28 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
       gemCount: state.gemCount,
       nextWheelSpin: state.nextWheelSpin,
       gameLevelProgress: updatedProgress,
+    ));
+  }
+
+  Future<void> _healthHit(HealthHitProgressEvent event, Emitter<GameProgressState> emit) async {
+    GameLevelProgress updatedProgress = state.gameLevelProgress.copyWith(
+      healthCount: state.gameLevelProgress.healthCount - 1,
+    );
+    emit(LoadedGameProgressState(
+      gemCount: state.gemCount,
+      nextWheelSpin: state.nextWheelSpin,
+      gameLevelProgress: updatedProgress,
+    ));
+  }
+
+  Future<void> _addGems(AddGemsProgressEvent event, Emitter<GameProgressState> emit) async {
+    final int gemCount = state.gemCount + state.gameLevelProgress.gameLevel.combinationReward;
+    _hiveRepository.saveContent("gemCount", gemCount);
+
+    emit(LoadedGameProgressState(
+      gemCount: gemCount,
+      nextWheelSpin: state.nextWheelSpin,
+      gameLevelProgress: state.gameLevelProgress,
     ));
   }
 }

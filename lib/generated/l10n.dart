@@ -133,10 +133,10 @@ class S {
     );
   }
 
-  /// `You have won +{value} coins`
+  /// `You have won +{value} diamonds`
   String fortuneWheelWinReward(Object value) {
     return Intl.message(
-      'You have won +$value coins',
+      'You have won +$value diamonds',
       name: 'fortuneWheelWinReward',
       desc: '',
       args: [value],
@@ -190,6 +190,16 @@ class S {
       name: 'rulesHealth',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `+{value} diamonds`
+  String addGemsHint(Object value) {
+    return Intl.message(
+      '+$value diamonds',
+      name: 'addGemsHint',
+      desc: '',
+      args: [value],
     );
   }
 }

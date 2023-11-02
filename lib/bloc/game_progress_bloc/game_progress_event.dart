@@ -29,3 +29,11 @@ class ChangeCardStateProgressEvent extends GameProgressEvent {
   final GameCardState newCardState;
   const ChangeCardStateProgressEvent({required this.cardIndex, required this.newCardState});
 }
+
+class HealthHitProgressEvent extends GameProgressEvent {
+  const HealthHitProgressEvent();
+}
+
+class AddGemsProgressEvent extends GameProgressEvent {
+  const AddGemsProgressEvent();
+}

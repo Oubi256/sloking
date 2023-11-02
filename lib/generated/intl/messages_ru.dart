@@ -20,22 +20,25 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(time) => "Следующий раз в ${time}";
+  static String m0(value) => "+${value} алмазов";
 
-  static String m1(value) => "Вы выиграли +${value} монет";
+  static String m1(time) => "Следующий раз в ${time}";
+
+  static String m2(value) => "Вы выиграли +${value} алмазов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addGemsHint": m0,
         "backToMenu": MessageLookupByLibrary.simpleMessage("Меню"),
         "dailyBonus": MessageLookupByLibrary.simpleMessage("Ежедневный бонус"),
         "fortuneWheelDefeat":
             MessageLookupByLibrary.simpleMessage("Повезет в другой раз"),
-        "fortuneWheelDelay": m0,
+        "fortuneWheelDelay": m1,
         "fortuneWheelSpin": MessageLookupByLibrary.simpleMessage("Вращать"),
         "fortuneWheelTryAgain":
             MessageLookupByLibrary.simpleMessage("Попробуй еще"),
         "fortuneWheelWin": MessageLookupByLibrary.simpleMessage("Поздравляем!"),
-        "fortuneWheelWinReward": m1,
+        "fortuneWheelWinReward": m2,
         "menuContinue": MessageLookupByLibrary.simpleMessage("Продолжить игру"),
         "menuNewGame": MessageLookupByLibrary.simpleMessage("Новая игра"),
         "menuRules": MessageLookupByLibrary.simpleMessage("Правила"),
