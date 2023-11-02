@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sloking/bloc/game_progress_bloc/game_progress_bloc.dart';
 import 'package:sloking/constants.dart';
 import 'package:sloking/enums/game_card_state_enum.dart';
+import 'package:sloking/extensions/game_field_extension.dart';
 
 import 'package:sloking/models/game_level_progress.dart';
 import 'package:sloking/widgets/gems/gem_counter.dart';
@@ -20,6 +21,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late List<FlipCardController?> cardControllers;
+  final Duration _animationDuration = Duration(milliseconds: 500);
 
   @override
   void initState() {
@@ -29,11 +31,15 @@ class _GamePageState extends State<GamePage> {
     super.initState();
   }
 
+  bool _canFlipCard(int index) {
+    return openedCardIndexes.contains(index);
+  }
+
   void _onTapCard(int cardIndex) async {
-    //print("TAP: $cardIndex | $isFront | ${gameLevelProgress.gameField[cardIndex]}");
-    bool isFront = !(cardControllers[cardIndex]!.state!.isFront);
-    context.read<GameProgressBloc>().add(FlipCardProgressEvent(cardIndex: cardIndex));
-    await cardControllers[cardIndex]?.flipcard();
+    if (_canFlipCard(cardIndex)) return;
+    if (openedCardIndexes.length >= 2) return;
+    if (isAnimationInProgress.value) return;
+    context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: cardIndex, newCardState: GameCardState.open));
   }
 
   void _generateCardControllers(GameLevelProgress gameLevelProgress) {
@@ -41,6 +47,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   void _continueGame(GameLevelProgress gameLevelProgress) {
+    _updateIndexes(gameLevelProgress);
     for (int i = 0; i < gameLevelProgress.gameField.length; i++) {
       if (gameLevelProgress.gameField[i].state == GameCardState.open) {
         cardControllers[i]?.flipcard();
@@ -48,15 +55,74 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  @override
-  void didUpdateWidget(covariant GamePage oldWidget) {
-    print("UPDATE");
-    super.didUpdateWidget(oldWidget);
+  List<int> openedCardIndexes = [];
+  List<int> closedCardIndexes = [];
+  List<int> hidedCardIndexes = [];
+
+  ValueNotifier<bool> isAnimationInProgress = ValueNotifier(false);
+
+  void _updateIndexes(GameLevelProgress gameLevelProgress) {
+    openedCardIndexes = gameLevelProgress.gameField.indexByState(GameCardState.open);
+    closedCardIndexes = gameLevelProgress.gameField.indexByState(GameCardState.closed);
+    hidedCardIndexes = gameLevelProgress.gameField.indexByState(GameCardState.hidden);
+  }
+
+  void _onComparedSuccessful() {
+  }
+  void _onComparedFailure() {}
+
+
+  void _gameLoop(GameLevelProgress gameLevelProgress) async {
+    _updateIndexes(gameLevelProgress);
+    //print("o: ${openedCardIndexes.length} | c: ${closedCardIndexes.length} | h:${hidedCardIndexes.length}");
+
+    // card opening handler
+    for (int openedCardIndex in openedCardIndexes) {
+      if (cardControllers[openedCardIndex]!.state!.isFront) {
+        cardControllers[openedCardIndex]?.flipcard();
+      }
+    }
+
+    // card closing handler
+    isAnimationInProgress.value = true;
+    Future.delayed(_animationDuration, () {
+      for (int openedCardIndex in closedCardIndexes) {
+        if (!cardControllers[openedCardIndex]!.state!.isFront) {
+          cardControllers[openedCardIndex]?.flipcard();
+        }
+      }
+      isAnimationInProgress.value = false;
+    });
+
+    // card comparing handler
+    if (openedCardIndexes.length == 2) {
+      if (gameLevelProgress.gameField[openedCardIndexes.first].type == gameLevelProgress.gameField[openedCardIndexes.last].type) {
+        isAnimationInProgress.value = true;
+        _onComparedSuccessful();
+        Future.delayed(_animationDuration, () {
+          context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.first, newCardState: GameCardState.hidden));
+          context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.last, newCardState: GameCardState.hidden));
+          isAnimationInProgress.value = false;
+        });
+      } else {
+        isAnimationInProgress.value = true;
+        _onComparedFailure();
+        Future.delayed(_animationDuration, () {
+          context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.first, newCardState: GameCardState.closed));
+          context.read<GameProgressBloc>().add(ChangeCardStateProgressEvent(cardIndex: openedCardIndexes.last, newCardState: GameCardState.closed));
+          isAnimationInProgress.value = false;
+        });
+
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GameProgressBloc, GameProgressState>(
+    return BlocConsumer<GameProgressBloc, GameProgressState>(
+      listener: (context, state) {
+        _gameLoop(state.gameLevelProgress);
+      },
       builder: (context, state) {
         return PageWrapper(
           backgroundImage: Image.asset(
@@ -82,28 +148,30 @@ class _GamePageState extends State<GamePage> {
                       ),
                       itemCount: state.gameLevelProgress.gameLevel.itemsCount,
                       itemBuilder: (_, index) {
-                        return Center(
-                          child: state.gameLevelProgress.gameField[index].state != GameCardState.hidden
-                              ? GestureDetector(
-                                  onTap: () => _onTapCard(index),
-                                  child: FlipCard(
-                                    axis: FlipAxis.vertical,
-                                    backWidget: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Image.asset(state.gameLevelProgress.gameField[index].type.faceAssetName),
-                                        Padding(
-                                          padding: EdgeInsets.all(10.r),
-                                          child: Image.asset(state.gameLevelProgress.gameField[index].type.iconAssetName),
-                                        ),
-                                      ],
-                                    ),
-                                    frontWidget: Image.asset(state.gameLevelProgress.gameField[index].type.backAssetName),
-                                    controller: cardControllers[index]!,
-                                    rotateSide: RotateSide.left,
+                        return AnimatedCrossFade(
+                          firstChild: GestureDetector(
+                            onTap: () => _onTapCard(index),
+                            child: FlipCard(
+                              animationDuration: _animationDuration,
+                              axis: FlipAxis.vertical,
+                              backWidget: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(state.gameLevelProgress.gameField[index].type.faceAssetName),
+                                  Padding(
+                                    padding: EdgeInsets.all(10.r),
+                                    child: Image.asset(state.gameLevelProgress.gameField[index].type.iconAssetName),
                                   ),
-                                )
-                              : SizedBox(),
+                                ],
+                              ),
+                              frontWidget: Image.asset(state.gameLevelProgress.gameField[index].type.backAssetName),
+                              controller: cardControllers[index]!,
+                              rotateSide: RotateSide.left,
+                            ),
+                          ),
+                          secondChild: SizedBox(),
+                          crossFadeState: state.gameLevelProgress.gameField[index].state != GameCardState.hidden ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                          duration: _animationDuration,
                         );
                       },
                     ),

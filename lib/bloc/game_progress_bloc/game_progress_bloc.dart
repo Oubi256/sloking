@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_flip_card/flipcard/flip_card.dart';
 import 'package:meta/meta.dart';
+import 'package:sloking/enums/game_card_state_enum.dart';
 import 'package:sloking/extensions/game_field_extension.dart';
 import 'package:sloking/game_levels.dart';
 import 'package:sloking/models/game_level_progress.dart';
@@ -27,7 +29,7 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
     on<FortuneWheelSpinProgressEvent>(_fortuneWheelSpin);
     on<NewGameProgressEvent>(_newGame);
     on<ContinueGameProgressEvent>(_continueGame);
-    on<FlipCardProgressEvent>(_flipCard);
+    on<ChangeCardStateProgressEvent>(_changeCardState);
   }
 
   void hiveInitListener() {
@@ -76,11 +78,11 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
     ));
   }
 
-  Future<void> _flipCard(FlipCardProgressEvent event, Emitter<GameProgressState> emit) async {
+  Future<void> _changeCardState(ChangeCardStateProgressEvent event, Emitter<GameProgressState> emit) async {
     GameCard flippedCard = state.gameLevelProgress.gameField[event.cardIndex];
     print("FLIP CARD: ${flippedCard.state} | ${flippedCard.type.name}");
     GameLevelProgress updatedProgress = state.gameLevelProgress.copyWith(
-      gameField: state.gameLevelProgress.gameField.flipCard(event.cardIndex),
+      gameField: state.gameLevelProgress.gameField.changeCardState(event.cardIndex, event.newCardState),
     );
     print("flip: ${updatedProgress.gameField.map((e) => e.state).toList()}");
 

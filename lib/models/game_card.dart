@@ -61,6 +61,13 @@ class GameCard {
     );
   }
 
+  GameCard changeState(GameCardState newState) {
+    return GameCard(
+      type: type,
+      state: newState,
+    );
+  }
+
   final GameCardType type;
   final GameCardState state;
 }
