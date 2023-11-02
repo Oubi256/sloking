@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_flip_card/flipcard/gesture_flip_card.dart';
 import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sloking/bloc/game_progress_bloc/game_progress_bloc.dart';
 import 'package:sloking/constants.dart';
 import 'package:sloking/enums/game_card_state_enum.dart';
 
-import 'package:sloking/models/game_level.dart';
 import 'package:sloking/models/game_level_progress.dart';
 import 'package:sloking/widgets/gems/gem_counter.dart';
 import 'package:sloking/widgets/general/page_wrapper.dart';
@@ -21,35 +19,38 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  late GameLevelProgress gameLevelProgress;
   late List<FlipCardController?> cardControllers;
 
   @override
   void initState() {
-    gameLevelProgress = GameLevelProgress.startGame(gameLevel: GameLevel(row: 2, column: 3, backgroundImage: Image.asset(""), combinationReward: 10, minUniqueCards: 5));
-
-    print("gameLevelProgress: ${gameLevelProgress.gameField}");
-    cardControllers = List.generate(gameLevelProgress.gameField.length, (index) => FlipCardController());
-    print("cardControllers: ${cardControllers.map((e) => e?.state?.isFront)}");
-
+    final GameLevelProgress gameLevelProgress = context.read<GameProgressBloc>().state.gameLevelProgress;
+    _generateCardControllers(gameLevelProgress);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _continueGame(gameLevelProgress));
     super.initState();
   }
 
   void _onTapCard(int cardIndex) async {
+    //print("TAP: $cardIndex | $isFront | ${gameLevelProgress.gameField[cardIndex]}");
     bool isFront = !(cardControllers[cardIndex]!.state!.isFront);
-    print("TAP: $cardIndex | $isFront | ${gameLevelProgress.gameField[cardIndex]}");
+    context.read<GameProgressBloc>().add(FlipCardProgressEvent(cardIndex: cardIndex));
     await cardControllers[cardIndex]?.flipcard();
+  }
+
+  void _generateCardControllers(GameLevelProgress gameLevelProgress) {
+    cardControllers = List.generate(gameLevelProgress.gameField.length, (index) => FlipCardController());
+  }
+
+  void _continueGame(GameLevelProgress gameLevelProgress) {
+    for (int i = 0; i < gameLevelProgress.gameField.length; i++) {
+      if (gameLevelProgress.gameField[i].state == GameCardState.open) {
+        cardControllers[i]?.flipcard();
+      }
+    }
   }
 
   @override
   void didUpdateWidget(covariant GamePage oldWidget) {
-    /*
-    for (int i = 0; i < cardControllers.length; i++) {
-      if (cardControllers[i] == null) continue;
-      cardControllers[i]?.state?.filpCard();
-    }
-     */
-
+    print("UPDATE");
     super.didUpdateWidget(oldWidget);
   }
 
@@ -74,15 +75,15 @@ class _GamePageState extends State<GamePage> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: gameLevelProgress.gameLevel.column,
+                        crossAxisCount: state.gameLevelProgress.gameLevel.column,
                         childAspectRatio: 2 / 2.5,
                         mainAxisSpacing: Constants.smallPadding,
                         crossAxisSpacing: Constants.smallPadding,
                       ),
-                      itemCount: gameLevelProgress.gameLevel.itemsCount,
+                      itemCount: state.gameLevelProgress.gameLevel.itemsCount,
                       itemBuilder: (_, index) {
                         return Center(
-                          child: gameLevelProgress.gameField[index].state != GameCardState.hidden
+                          child: state.gameLevelProgress.gameField[index].state != GameCardState.hidden
                               ? GestureDetector(
                                   onTap: () => _onTapCard(index),
                                   child: FlipCard(
@@ -90,14 +91,14 @@ class _GamePageState extends State<GamePage> {
                                     backWidget: Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        Image.asset(gameLevelProgress.gameField[index].faceAssetName),
+                                        Image.asset(state.gameLevelProgress.gameField[index].type.faceAssetName),
                                         Padding(
                                           padding: EdgeInsets.all(10.r),
-                                          child: Image.asset(gameLevelProgress.gameField[index].iconAssetName),
+                                          child: Image.asset(state.gameLevelProgress.gameField[index].type.iconAssetName),
                                         ),
                                       ],
                                     ),
-                                    frontWidget: Image.asset(gameLevelProgress.gameField[index].backAssetName),
+                                    frontWidget: Image.asset(state.gameLevelProgress.gameField[index].type.backAssetName),
                                     controller: cardControllers[index]!,
                                     rotateSide: RotateSide.left,
                                   ),

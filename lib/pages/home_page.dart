@@ -101,7 +101,10 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ConvexTextButton(label: S.of(context).menuContinue, onPressed: () {}),
+                  ConvexTextButton(label: S.of(context).menuContinue, onPressed: () {
+                    context.read<GameProgressBloc>().add(const ContinueGameProgressEvent());
+                    context.go("/home/game");
+                  }),
                   SizedBox(height: Constants.defaultPadding),
                   ConvexTextButton(
                       label: S.of(context).menuNewGame,

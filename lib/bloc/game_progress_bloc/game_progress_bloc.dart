@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:sloking/extensions/game_field_extension.dart';
 import 'package:sloking/game_levels.dart';
 import 'package:sloking/models/game_level_progress.dart';
 
+import '../../models/game_card.dart';
 import '../../repositories/hive_repository.dart';
 
 part 'game_progress_event.dart';
@@ -66,6 +68,7 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
   }
 
   Future<void> _continueGame(ContinueGameProgressEvent event, Emitter<GameProgressState> emit) async {
+    print("continue: ${state.gameLevelProgress.gameField.map((e) => e.state).toList()}");
     emit(LoadedGameProgressState(
       gemCount: state.gemCount,
       nextWheelSpin: state.nextWheelSpin,
@@ -74,6 +77,17 @@ class GameProgressBloc extends Bloc<GameProgressEvent, GameProgressState> {
   }
 
   Future<void> _flipCard(FlipCardProgressEvent event, Emitter<GameProgressState> emit) async {
-    emit(LoadedGameProgressState(gemCount: state.gemCount, nextWheelSpin: state.nextWheelSpin, gameLevelProgress: state.gameLevelProgress));
+    GameCard flippedCard = state.gameLevelProgress.gameField[event.cardIndex];
+    print("FLIP CARD: ${flippedCard.state} | ${flippedCard.type.name}");
+    GameLevelProgress updatedProgress = state.gameLevelProgress.copyWith(
+      gameField: state.gameLevelProgress.gameField.flipCard(event.cardIndex),
+    );
+    print("flip: ${updatedProgress.gameField.map((e) => e.state).toList()}");
+
+    emit(LoadedGameProgressState(
+      gemCount: state.gemCount,
+      nextWheelSpin: state.nextWheelSpin,
+      gameLevelProgress: updatedProgress,
+    ));
   }
 }

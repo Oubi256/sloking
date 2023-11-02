@@ -25,5 +25,6 @@ class ContinueGameProgressEvent extends GameProgressEvent {
 }
 
 class FlipCardProgressEvent extends GameProgressEvent {
-  const FlipCardProgressEvent();
+  final int cardIndex;
+  const FlipCardProgressEvent({required this.cardIndex});
 }
