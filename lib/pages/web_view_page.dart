@@ -27,13 +27,20 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageWrapper(
-      child: SafeArea(
-          child: Container(
-              decoration: const BoxDecoration(
-                boxShadow: [BoxShadow(blurRadius: 6, spreadRadius: 1, color: Colors.black26)],
-              ),
-              child: WebViewWidget(controller: widget.webViewController))),
+    return WillPopScope(
+      onWillPop: () async {
+        final canGoBack = await widget.webViewController.canGoBack();
+        if (canGoBack) widget.webViewController.goBack();
+        return false;
+      },
+      child: PageWrapper(
+        child: SafeArea(
+            child: Container(
+                decoration: const BoxDecoration(
+                  boxShadow: [BoxShadow(blurRadius: 6, spreadRadius: 1, color: Colors.black26)],
+                ),
+                child: WebViewWidget(controller: widget.webViewController))),
+      ),
     );
   }
 }
