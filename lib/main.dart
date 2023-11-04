@@ -1,4 +1,3 @@
-import 'package:country_ip/country_ip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +11,8 @@ import 'package:sloking/pages/home_page.dart';
 import 'package:sloking/pages/rules_page.dart';
 import 'package:sloking/pages/splash_page.dart';
 import 'package:sloking/generated/l10n.dart';
+import 'package:sloking/pages/web_view_page.dart';
 import 'package:sloking/repositories/hive_repository.dart';
-import 'package:sloking/web_view_app.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 part 'router_config.dart';
@@ -26,25 +25,20 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  final WebViewController webViewController = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color(0x00000000))
-    ..loadRequest(Uri.parse("https://nebulaquest.site/Fj6Xtv6W"));
-
-  final countryIpResponse = await CountryIp.find();
-
-  if ((countryIpResponse?.countryCode) == "UA") {
-    runApp(WebViewApp(webViewController: webViewController));
-  } else {
-    runApp(const MyApp());
-  }
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -75,4 +69,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

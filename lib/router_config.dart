@@ -8,6 +8,10 @@ GoRouter _routerConfig = GoRouter(
       builder: (_, __) => SplashPage(),
     ),
     GoRoute(
+      path: '/web_view',
+      builder: (_, state) => WebViewPage(webViewController: state.extra as WebViewController),
+    ),
+    GoRoute(
       path: '/home',
       builder: (_, __) => HomePage(),
       routes: [
